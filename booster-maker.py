@@ -17,41 +17,25 @@ def prompt_user(**cards):
     return cards
 
 
-def main():
-    cards = {
-        'green': 0,
-        'white': 0,
-        'blue': 0,
-        'red': 0,
-        'gold': 0,
-        'colorless': 0
-    }
-    user_cards = prompt_user(**cards)
-    boost_size = int(input('# of cards per booster pack: '))
+def generate_booster_pack(user_cards, **boost):
+    while boost['again']:
+        boost['counter'] += 1
 
-    booster_index = 0
-    booster_counter = 0
-    boost_again = True
-    boost_success = True
-
-    while boost_again:
-        booster_counter += 1
-
-        print ("\nGenerating booster pack #" + str(booster_counter) + "\n")
+        print ("\nGenerating booster pack #" + str(boost['counter']) + "\n")
         boost_query = ' '
-        for booster_index in range(0, boost_size):
+        for boost['index'] in range(0, boost['size']):
             card_total = sum(user_cards.values())
             if card_total == 0 :
-                boost_success = False
+                boost['success']= False
                 print("Insufficient cards to complete booster pack.\n")
                 break
 
             card_selected = random.choice([color for color in user_cards if user_cards[color] > 0])
             user_cards[card_selected] -= 1
 
-            print( str(booster_index + 1) + ". ) " + card_selected.capitalize())
+            print( str(boost['index'] + 1) + ". ) " + card_selected.capitalize())
 
-        if boost_success :
+        if boost['success']:
             print("\nBooster pack complete.\n")
 
         while (boost_query.lower() != 'y' and boost_query.lower() != 'n'):
@@ -64,7 +48,34 @@ def main():
                 boost_query = input('Create a new booster pack? (y/n)')
 
             if boost_query.lower() == 'n':
-                boost_again = False
+                boost['again'] = False
+
+
+def main():
+    cards = {
+        'green': 0,
+        'white': 0,
+        'blue': 0,
+        'red': 0,
+        'gold': 0,
+        'colorless': 0
+    }
+    user_cards = prompt_user(**cards)
+
+    booster_index = 0
+    booster_counter = 0
+    boost_again = True
+    boost_success = True
+
+    boost = {
+        'index': 0,
+        'counter': 0,
+        'again': True,
+        'success': True
+    }
+    boost['size'] = int(input('# of cards per booster pack: '))
+
+    generate_booster_pack(user_cards, **boost)
 
 
 if __name__ == '__main__':
