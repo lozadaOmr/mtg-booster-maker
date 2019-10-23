@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 
+import json
+import os
 import random
+import sys
 from itertools import chain, repeat
 
 
@@ -51,7 +54,14 @@ def generate_booster_pack(user_cards, **boost):
                 boost['again'] = False
 
 
+def generate_from_file():
+    if os.path.exists(sys.argv[1]) and sys.argv[1].endswith('.json'):
+        print ('exist')
+
+
 def main():
+    if sys.argv[1]:
+        generate_from_file()
     cards = {
         'green': 0,
         'white': 0,
